@@ -8,7 +8,7 @@
       <link href="/posts/ea4504c4/"/>
       <url>/posts/ea4504c4/</url>
       
-        <content type="html"><![CDATA[<h2 id="牛顿迭代法"><a href="#牛顿迭代法" class="headerlink" title="牛顿迭代法"></a>牛顿迭代法</h2><p>General Formula：<br>$$<br>X_n = X_{n-1} - \frac{f(x_{n-1})}{f’(x_{n-1})}<br>$$<br>Approximate $x$  for $f(x) = 0$</p><h2 id="什么是牛顿迭代？"><a href="#什么是牛顿迭代？" class="headerlink" title="什么是牛顿迭代？"></a>什么是牛顿迭代？</h2><p>牛顿迭代法又称为切线法，它比一般的迭代法具有更高的收敛速度。</p><p>首先，选择一个接近函数$f(x)$零点的$x_0$，计算相应的$f(x_0)$和切线的斜率$f’(x_0)$。然后我们可以表示出来，过$(x_0,f(x_0))$的切线方程为：<br>$$<br>y  =f(x_0) + f’(x_0)(x - x_0)<br>$$<br>和x轴交点的x的坐标，也就是如下方程的解：<br>$$<br>f(x_0) + f’(x_0)(x - x_0) = 0<br>$$<br>得到新的$x$坐标$x_1$继续迭代，直到收敛停止。</p><p>图像为：</p><p><img src="https://gitee.com/mqb0526/pic/raw/master/2021/08/f703738da97739126a4f98f3ff198618367ae233.jpg"></p><p>举例：<br>$$<br>f(x) = x^2 - 1 = 0<br>$$</p><p>$$<br>f’(x) = 2x, x_0 = 2<br>$$</p><p>$$<br>x_1 = x_0 - \frac{f(x_0)}{f’(x_0)} = 2 - \frac{3}{4} = \frac{5}{4}<br>$$</p><p>$$<br>x_2 = x_1 - \frac{f(x_1)}{f’(x_1)} = \frac{5}{4} - \frac{\frac{9}{16}}{\frac{5}{2}} = \frac{41}{40}<br>$$</p><p>$$<br>x_3 = x_2 - \frac{f(x_2)}{f’(x_2)} = \frac{41}{40} - \frac{(\frac{41}{40})^2 - 1}{\frac{41}{20}} = \frac{3281}{3280} = 1.000305<br>$$</p><h2 id="matlab中的实现求解"><a href="#matlab中的实现求解" class="headerlink" title="matlab中的实现求解"></a>matlab中的实现求解</h2><p>在matlab中有一个fsolve() function 去实现对非线性方程组求解。</p><p>For example, solve this equation:<br>$$<br>f2 = 1.2x + 0.3 + xsin(x)<br>$$</p><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%使用handle定义了一个inline function%</span></span><br><span class="line">f2 = @(x) (<span class="number">1.2</span> * x + <span class="number">0.3</span> + x * <span class="built_in">sin</span>(x))</span><br><span class="line"><span class="comment">%fsolve(a function handle, initial guess)%</span></span><br><span class="line">fsolve(f2, <span class="number">0</span>)</span><br></pre></td></tr></table></figure><p>==当然，这里的fsolve并不是使用的纯粹的牛顿迭代，比普通牛顿迭代更加强大。具体实现不再深究。==</p>]]></content>
+        <content type="html"><![CDATA[<h2 id="牛顿迭代法"><a href="#牛顿迭代法" class="headerlink" title="牛顿迭代法"></a>牛顿迭代法</h2><p>General Formula：<br>$$<br>X_n = X_{n-1} - \frac{f(x_{n-1})}{f’(x_{n-1})}<br>$$<br>Approximate $x$  for $f(x) = 0$</p><h2 id="什么是牛顿迭代？"><a href="#什么是牛顿迭代？" class="headerlink" title="什么是牛顿迭代？"></a>什么是牛顿迭代？</h2><p>牛顿迭代法又称为切线法，它比一般的迭代法具有更高的收敛速度。</p><p>首先，选择一个接近函数$f(x)$零点的$x_0$，计算相应的$f(x_0)$和切线的斜率$f’(x_0)$。然后我们可以表示出来，过$(x_0,f(x_0))$的切线方程为：<br>$$<br>y  =f(x_0) + f’(x_0)(x - x_0)<br>$$<br>和x轴交点的x的坐标，也就是如下方程的解：<br>$$<br>f(x_0) + f’(x_0)(x - x_0) = 0<br>$$<br>得到新的$x$坐标$x_1$继续迭代，直到收敛停止。</p><p>图像为：</p><p><img src="https://gitee.com/mqb0526/pic/raw/master/2021/08/f703738da97739126a4f98f3ff198618367ae233.jpg"></p><p>举例：<br>$$<br>f(x) = x^2 - 1 = 0<br>$$</p><p>$$<br>f’(x) = 2x, x_0 = 2<br>$$</p><p>$$<br>x_1 = x_0 - \frac{f(x_0)}{f’(x_0)} = 2 - \frac{3}{4} = \frac{5}{4}<br>$$</p><p>$$<br>x_2 = x_1 - \frac{f(x_1)}{f’(x_1)} = \frac{5}{4} - \frac{\frac{9}{16}}{\frac{5}{2}} = \frac{41}{40}<br>$$</p><p>$$<br>x_3 = x_2 - \frac{f(x_2)}{f’(x_2)} = \frac{41}{40} - \frac{(\frac{41}{40})^2 - 1}{\frac{41}{20}} = \frac{3281}{3280} = 1.000305<br>$$</p><h2 id="matlab中的实现求解"><a href="#matlab中的实现求解" class="headerlink" title="matlab中的实现求解"></a>matlab中的实现求解</h2><p>在matlab中有一个fsolve() function 去实现对非线性方程组求解。</p><p>For example, solve this equation:<br>$$<br>f2 = 1.2x + 0.3 + xsin(x)<br>$$</p><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%使用handle定义了一个inline function%</span></span><br><span class="line">f2 = @(x) (<span class="number">1.2</span> * x + <span class="number">0.3</span> + x * <span class="built_in">sin</span>(x))</span><br><span class="line"><span class="comment">%fsolve(a function handle, initial guess)%</span></span><br><span class="line">fsolve(f2, <span class="number">0</span>)</span><br></pre></td></tr></table></figure><p>当然，这里的fsolve并不是使用的纯粹的牛顿迭代，比普通牛顿迭代更加强大。具体实现不再深究。</p>]]></content>
       
       
       
@@ -30,11 +30,11 @@
     
     
     <entry>
-      <title>代码演示</title>
-      <link href="/posts/30626/"/>
-      <url>/posts/30626/</url>
+      <title>测试</title>
+      <link href="/posts/0/"/>
+      <url>/posts/0/</url>
       
-        <content type="html"><![CDATA[<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span>(<span class="params">x</span>):</span></span><br><span class="line">    <span class="keyword">return</span> x * x</span><br></pre></td></tr></table></figure><h2 id="测试1"><a href="#测试1" class="headerlink" title="测试1"></a>测试1</h2><h2 id="测试2"><a href="#测试2" class="headerlink" title="测试2"></a>测试2</h2><h2 id="测试3"><a href="#测试3" class="headerlink" title="测试3"></a>测试3</h2>]]></content>
+        <content type="html"><![CDATA[<h2 id="123"><a href="#123" class="headerlink" title="123"></a>123</h2>]]></content>
       
       
       
@@ -43,11 +43,11 @@
     
     
     <entry>
-      <title>测试</title>
-      <link href="/posts/0/"/>
-      <url>/posts/0/</url>
+      <title>代码演示</title>
+      <link href="/posts/30626/"/>
+      <url>/posts/30626/</url>
       
-        <content type="html"><![CDATA[<h2 id="123"><a href="#123" class="headerlink" title="123"></a>123</h2>]]></content>
+        <content type="html"><![CDATA[<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span>(<span class="params">x</span>):</span></span><br><span class="line">    <span class="keyword">return</span> x * x</span><br></pre></td></tr></table></figure><h2 id="测试1"><a href="#测试1" class="headerlink" title="测试1"></a>测试1</h2><h2 id="测试2"><a href="#测试2" class="headerlink" title="测试2"></a>测试2</h2><h2 id="测试3"><a href="#测试3" class="headerlink" title="测试3"></a>测试3</h2>]]></content>
       
       
       
