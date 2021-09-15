@@ -1,0 +1,349 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>07Batch and Momentum | Mqb's Blog</title><meta name="keywords" content="李宏毅机器学习"><meta name="author" content="mqb"><meta name="copyright" content="mqb"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="machine learning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="07Batch and Momentum">
+<meta property="og:url" content="http://mqbin.github.io/posts/bddf4f25/index.html">
+<meta property="og:site_name" content="Mqb&#39;s Blog">
+<meta property="og:description" content="machine learning">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picsum.photos/id/723/5184/3456">
+<meta property="article:published_time" content="2021-09-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-09-15T09:03:09.955Z">
+<meta property="article:author" content="mqb">
+<meta property="article:tag" content="李宏毅机器学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picsum.photos/id/723/5184/3456"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://mqbin.github.io/posts/bddf4f25/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '07Batch and Momentum',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-09-15 17:03:09'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    document.addEventListener('pjax:complete', detectApple)})(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/./img/touxiang.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down expand hide"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://picsum.photos/id/723/5184/3456')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Mqb's Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down expand hide"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">07Batch and Momentum</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-09-09T16:00:00.000Z" title="发表于 2021-09-10 00:00:00">2021-09-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-09-15T09:03:09.955Z" title="更新于 2021-09-15 17:03:09">2021-09-15</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="07Batch and Momentum"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="Batch-and-Momentum">Batch and Momentum</h2>
+<p><img src="https://gitee.com/mqb0526/pic/raw/master/2021/09/image-20210914094252576.png" alt="image-20210914094252576"></p>
+<p>之前有提到说，我们在train Model的时候，每次Update参数并不是对所有的数据来做微分，你是把所有的Data分成一个一个小的Batch，也叫Mini Batch，其实本质上是一样的东西。每一个Batch的大小设为B，在Update的过程中，拿B笔资料算出来Loss，算出gradient去update参数，由此类推，所以我们不会拿所有的资料去算出Loss，只会拿一个Batch的资料，拿出来算Loss。</p>
+<p>所有的Batch看过一遍就叫一个Epoch，事实上，在做Batch的时候，我们会做<strong>Shuffle</strong></p>
+<p>Shuffle有很多不同的做法，但是最常见的一个做法就是，在每一个Epoch开始之前，会分一次Batch，每一个Epoch的 Batch都是有所区别的</p>
+<p><strong>通俗的说就是我们第一个Epoch，我们分这样子的Batch，第二个Epoch，会重新再分一次Batch，每一个Epoch都是不一样的。</strong></p>
+<h3 id="Small-Batch-v-s-Large-Batch">Small Batch v.s. Large Batch</h3>
+<p><strong>为什么要用batch？</strong></p>
+<p><img src="https://gitee.com/mqb0526/pic/raw/master/2021/09/image-20210914095448593.png" alt="image-20210914095448593"></p>
+<p>这边有两幅图，假设我们现在有20笔训练资料</p>
+<ul>
+<li>左边的case就是没用Batch，Batch Size大小就是训练资料一样多，这也叫Fully Batch</li>
+<li>右边的Case就是Batch Size 设为了1</li>
+</ul>
+<p>这是最极端的两种状况了，我们先来看左边的Case，这里没有使用Batch，我们的Model必须把20笔资料都看完，才会计算一次Loss，Update一次Parameters。参数移动到了下面。</p>
+<p>如果Batch Size等于1的话，代表我们只需要拿一笔资料算出来Loss，我们就可以Update我们的参数，所以每次我们Update参数的时候，看一笔资料就好了，所以我们开始的点这边，看一笔资料就Update一次参数，再看一笔资料就Update一次参数，如果今天总共有20笔资料的话，那在每一个Epoch里面我们的参数会Update20次，不过我们先在只是看一笔资料就Update一次参数，所以这种情况Update参数的话，是比较Noisy的，所以今天Update的方向是比较曲折的。</p>
+<p><strong>所以，如果我们比较左边和右边，哪一个比较好呢？</strong></p>
+<p><img src="https://gitee.com/mqb0526/pic/raw/master/2021/09/image-20210914100702484.png" alt="image-20210914100702484"></p>
+<p>图上说明了，在不使用Batch Size 的情况下等待的时间会比较长，因为要把所有的资料都看过一遍才会Update一次参数，但是更新起来是比较稳定的，不会很noisy。</p>
+<p>而使用了Batch Size 的方法之后，因为每次只需要看一笔资料就可以进行一次Update了，当将20笔资料全部看过后，其实已经更新了20次参数了，这个在现在看来需要时间短，但是不稳。</p>
+<p><strong>我们能不能说不使用batch size的方法的运算时间就一定比右边长呢？</strong></p>
+<p>事实上，不一定！</p>
+<p>当我们考虑并行计算的能力之后，实际进行试验，我们会发现比较大的Batch Size，我们要计算Loss，进而再计算Gradient，所需要的时间是不同的，不一定比小的Batch Size花费的时间长！</p>
+<p>下面是课上老师做的MNIST的试验(Mixed National Institute of Standards and Technology database)，这个数据集就相当于进入机器学习副本的新手任务，一般都会拿来练手，主要用来训练判断一个图片上的手写数字是 0-9之间哪一个数。</p>
+<p><img src="https://gitee.com/mqb0526/pic/raw/master/2021/09/image-20210914102038279.png" alt="image-20210914102038279"></p>
+<p>这边我们做了一个实验，我们想知道说，给机器一个Batch，它要计算出梯度，去Update参数花费的时间。</p>
+<p>我们发现在Batch Size为1 到1000这个范围里面，花费的时间基本没有差别，所以说，之前想的一个小的Batch应该比大的Batch更新的速度要更快这个想法其实并不正确。</p>
+<p>主要就是因为在实际运算过程中，我们有GPU，可以用来做并行运算，因为有GPU的加速，导致了1到1000大小的batch size计算时间差距不大。GPU确实也有极限，可以看到在1000之后的batch我们发现时间增长很快。</p>
+<p>现在GPU的更新速度也是蛮快的，比如之前的760 980，这种要跑60000个Batch的情况，需要跑好几分钟才可以跑完，但现在的GPU只需要10秒就可以了，硬件也制约着技术的发展。</p>
+<p><strong>上面是对于Update的情况，下面咱们来看看对于Epoch怎么说</strong></p>
+<p><img src="https://gitee.com/mqb0526/pic/raw/master/2021/09/image-20210914104025487.png" alt="image-20210914104025487"></p>
+<p><strong>我们发现说，当Batch Size小的时候，要跑完一个Epoch，花费的时间是比大的Batch Size还要多的</strong></p>
+<p>假设训练资料只有60000笔，Batch Size 设为1，那你要60000个Update才能跑完一个Epoch，如果今天是Batch Size等于1000，需要60个Update才能跑完一个Epoch，假设今天一个Batch Size等于1000，就算Gradient的时间根部差不多，拿60000次的Update和60次的Update比起来真实是差距很大，就会发现其实这样的话比较大的Batch Size 反而比较快。</p>
+<p>看这个两个图比较Update和Epoch对于这个batch size的话，我们发现他们俩是相反的。</p>
+<p><img src="https://gitee.com/mqb0526/pic/raw/master/2021/09/image-20210914105232512.png" alt="image-20210914105232512"></p>
+<p>如果真的这种情况下，是大的Batch Size反而比小的Batch Size的时间要短的话，那么上面提到的小的Batch Size更快的优势也就消失了，那为什么我们还经常使用小的Batch Size去train呢？</p>
+<p>上面提到了，大的Batch，这个Update是比较稳定的，小的Batch它的Gradient的方向比Noisy，这样好像看起来是稳定比较好，好像是大的是有优势的，<strong>但是，事实是Noisy的Gradient反而可以更好的帮助Training，这与直觉刚好相反</strong></p>
+<p><img src="https://gitee.com/mqb0526/pic/raw/master/2021/09/image-20210914110203461.png" alt="image-20210914110203461"></p>
+<p>上图横轴代表batch size，纵轴代表accuracy，越往上accuracy越高。</p>
+<p>而且如果我们今天看Validation Acc上的结果，会发现Batch Size越大，Validation Acc上面的结果反而越差，这边采用的是相同的模型去做验证。</p>
+<p><strong>事实也就是大的Batch Size，往往Training的时候，会给我们带来比较差的结果。这里不是Model Bias，因为采用同样的Model比较，这里是优化问题。也就是当使用大的Batch Size的时候，这个Optimization 可能会出现问题</strong></p>
+<h3 id="Noisy-update-is-better-for-training">Noisy update is better for training</h3>
+<p><img src="https://gitee.com/mqb0526/pic/raw/master/2021/09/image-20210914110815554.png" alt="image-20210914110815554"></p>
+<p>这么看，如果我们是Full Batch，那么我们今天在Update我们的参数的时候，就是沿着一个Loss Function来Update参数，今天Update参数的时候，走到一个Local Minima，走到一个Saddle point，我们不看海森矩阵的话，那就不能再更新参数了。</p>
+<p>但是，如果我们采用了Small Batch的话，因为我们每次都是挑选一个Batch出来，算出它的Loss，所以说等于是我们每一次Update参数的时候，我们使用Loss Function都是有差异的，当选到第一个Batch，用L1来计算Gradient，第二个用L2计算，如果说L1计算梯度发现是0，卡住了，但是L2他的Function跟L1是不同的，所以在L2上可能就不会卡住，所以这种比较noisy的方式反而对Training来说是有帮助的。</p>
+<h3 id="Noisy-Update-is-better-for-generalization">Noisy Update is better for generalization</h3>
+<p>小的batch其实对Testing也是有帮助的。</p>
+<p>这里我们假设在Training的时候，大的Batch Size和小的Batch Size我们train到一样好了，刚才的Case就是training的时候就已经Training不好了，但这里我们为了比较，假设说Training的时候就一样好，来看在Testing上面的效果。</p>
+<p><strong>先说结论，小的Batch，在Testing的时候会是比较好的</strong></p>
+<p><img src="https://gitee.com/mqb0526/pic/raw/master/2021/09/image-20210914112340948.png" alt="image-20210914112340948"></p>
+<p>这边举了一个pepar的实验</p>
+<p>出自：On Large-Batch Training For Deep Learning,Generalization Gap And Sharp Minima</p>
+<p>链接：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1609.04836">https://arxiv.org/abs/1609.04836</a></p>
+<p>其中实验结果我们可以看到就我们训练得到了差不多的Training的Accuracy，做在不同的Cover上，来表示这个实验是很泛用的，在很多不同的Case都观察到一样的结果，那它有小的Batch，一个Batch里面有256笔Example，大的Batch就是那个Data Set 乘 0.1，Data Set乘0.1，Data Set有60000笔，那你就是一个Batch里面有6000笔资料</p>
+<p>然后他想办法，在大的Batch跟小的Batch，都Train到差不多的Training的Accuarcy，所以刚才我们看到的结果是，Batch Size大的时候，Training Accuracy就已经差掉了，但是这边其实这两种SB LB在Training Set的时候是差不多的。但是就算是在Training的时候结果差不多，Testing的时候还是可以明显的看出，Small Batch的准确率要高于Large Batch</p>
+<h3 id="Why？">Why？</h3>
+<p><img src="https://gitee.com/mqb0526/pic/raw/master/2021/09/image-20210914144836555.png" alt="image-20210914144836555"></p>
+<p>假设这个是我们的Training Loss，那在这个Training Loss上面，可能会有多个Local Minima，有不只有一个Local Minima，那这些Local Minima 他们的Loss都是很低的，但是Local Minima也是有好坏的区别的</p>
+<p>如果一个Local Minima它在一个峡谷里，他是坏的Minima，然后它在一个平原上，它是好的Minima，为什么这么说呢？</p>
+<ul>
+<li>在Training和Testing中间有一个Mismatch，Training 的Loss跟Testing的Loss，它们那个Function不一样，有可能是本来你Training跟Testing的Distribution就不一样。</li>
+<li>那也有可能是因为Training跟Testing，都是取样出来的，也许Training跟Testing，Sample到Data不一样，那所以它们算出来的Loss，当然是有些差距的。</li>
+</ul>
+<p>那我们就假设说这个Training跟Testing，它的差距就是把Training的Loss，这个Function往右平移一点，这个时候我们会发现对左边这个在一个盆地里面的Minima来说，它的在Training跟Testing上面的结果，是不会差太多的，而如果是那个Sharp Minima来说，这一下就差距特别大</p>
+<p>它在这个Training Set上训练，得到的Loss很低了，但是因为Training和Testing不同，Error Surface一改变，那种陡峭的地方就会差距特别大。</p>
+<p><strong>很多人相信这个大的 Batch Size,会让我们倾向於走到峡谷裡面,而小的 Batch Size,倾向於让我们走到盆地裡面</strong></p>
+<p>原因是：小的Batch有很多Loss，每次Update的方向都不太一样，也就是不稳定，如果一个峡谷很窄，可能因为这个不稳定性就跳出了峡谷，没有被峡谷困住。</p>
+<p><strong>这只是一种为了理解的解释，这个问题在现在任然是一个待研究的问题</strong></p>
+<p>比较：</p>
+<p><img src="https://gitee.com/mqb0526/pic/raw/master/2021/09/image-20210914150655805.png" alt="image-20210914150655805"></p>
+<p>那么现在考虑能不能我们取Small Batch和Large Batch的优点，得到一个好的结果呢？</p>
+<p><img src="https://gitee.com/mqb0526/pic/raw/master/2021/09/image-20210914151033981.png" alt="image-20210914151033981"></p>
+<p>是有可能的，这边有很多的文章都在讨论这个问题，比如76分钟训练一个BERT，15分支训练一个ResNet等等，Batch Size开的特别大之后训练时间可以明显的缩小，但是为了还是需要一些特殊的方法去解决弊端。</p>
+<h3 id="Momentum">Momentum</h3>
+<p>Momentum，这也是另外一个，有可能可以对抗Saddle Point或者Local Minima的技术</p>
+<p><img src="https://gitee.com/mqb0526/pic/raw/master/2021/09/image-20210914151339107.png" alt="image-20210914151339107"></p>
+<p>其实这个很形象就像现实物理世界中，我们假设Error Surface是一个真正的斜坡，而我们的参数是一个球，把球从斜坡上滚下。</p>
+<p>如果是Gradient Descent，它走到Local Minima就停住了，走到Saddle Point就停住了，但是在物理的世界里呢？一个球如果从高坡滚下来，滚到Saddle Point，还是有一个惯性会带着它从local Minima继续向前冲一段，当这个惯性足够大的时候，有可能会翻过这个小坡到另一个更低的Loss。</p>
+<h3 id="Vanilla-一般的-香草的-Gradient-Descent">Vanilla(一般的/香草的) Gradient Descent</h3>
+<p>review Gradient Descent长得是什么样子</p>
+<p><img src="https://gitee.com/mqb0526/pic/raw/master/2021/09/image-20210914152026215.png" alt="image-20210914152026215"></p>
+<p>一般的Gradient Descent就是有初始参数<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>θ</mi><mn>0</mn></msup></mrow><annotation encoding="application/x-tex">\theta^0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span></span></span></span></span></span></span></span>，计算一下Gradient，然后计算完这个Gradient之后，往Gradient的反方向Update参数</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>θ</mi><mn>1</mn></msup><mo>=</mo><msup><mi>θ</mi><mn>0</mn></msup><mo>−</mo><mi>η</mi><msup><mi>g</mi><mn>0</mn></msup></mrow><annotation encoding="application/x-tex">\theta^1 = \theta^0 - \eta g^0
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8641079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.9474379999999999em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.0585479999999998em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">η</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>我们得到了新的参数，再次计算一次Gradient，往Gradient的反方向，再Update一次参数，到了新的位置以后再计算一次Gradient，再往Gradient的反方向去Update参数，这个Process就一直继续下去。</p>
+<h3 id="Gradient-Descent-Momentum">Gradient Descent + Momentum</h3>
+<p>加上Momentum以后，每一次我们再移动我们的参数的时候，我们不是只往Gradient Descent，不是只往Gradient的反方向来移动参数，而是Gradient的反方向，加上前一步移动的方向，两者加起来的结果去调整参数。</p>
+<p><img src="https://gitee.com/mqb0526/pic/raw/master/2021/09/image-20210914152719666.png" alt="image-20210914152719666"></p>
+<p>你会发现说,现在这个加上 Momentum 以后,一个解读是 Momentum 是,Gradient 的负反方向加上前一次移动的方向,那但另外一个解读方式是,所谓的 Momentum,当加上 Momentum 的时候,我们 Update 的方向,不是只考虑现在的 Gradient,而是考虑过去所有 Gradient 的总合.</p>
+<h3 id="例子">例子</h3>
+<p><img src="https://gitee.com/mqb0526/pic/raw/master/2021/09/image-20210914153152513.png" alt="image-20210914153152513"></p>
+<p><img src="https://gitee.com/mqb0526/pic/raw/master/2021/09/image-20210914153228027.png" alt="image-20210914153228027"></p>
+<p>在梯度为0的地方，如果只是Gradient Descent的话，已经走不动了，因为Momentum的影响我们任然可以向右走，甚至你走到上坡地方，Gradient告诉你应该要往左走了，但是假设你的前一步影响力比Gradient要大的话，你还是有可能继续往右走，甚至翻过一个小丘，搞不好可以走到更好的Local Minima。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">mqb</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://mqbin.github.io/posts/bddf4f25/">http://mqbin.github.io/posts/bddf4f25/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://mqbin.github.io" target="_blank">Mqb's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%9D%8E%E5%AE%8F%E6%AF%85%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">李宏毅机器学习</a></div><div class="post_share"><div class="social-share" data-image="https://picsum.photos/id/723/5184/3456" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/fd159c93/"><img class="prev-cover" src="https://picsum.photos/id/723/5184/3456" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">06Local Minima and Saddle Point</div></div></a></div><div class="next-post pull-right"><a href="/posts/52da8f54/"><img class="next-cover" src="https://picsum.photos/id/723/5184/3456" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">05基本指导</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/fdaba67d/" title="01regression"><img class="cover" src="https://picsum.photos/id/723/5184/3456" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-09-08</div><div class="title">01regression</div></div></a></div><div><a href="/posts/64a2f7c7/" title="02regression"><img class="cover" src="https://picsum.photos/id/723/5184/3456" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-09-10</div><div class="title">02regression</div></div></a></div><div><a href="/posts/8ed3abb8/" title="03(补充)deep learning"><img class="cover" src="https://picsum.photos/id/723/5184/3456" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-09-10</div><div class="title">03(补充)deep learning</div></div></a></div><div><a href="/posts/1969c2f9/" title="04(补充)反向传播"><img class="cover" src="https://picsum.photos/id/723/5184/3456" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-09-10</div><div class="title">04(补充)反向传播</div></div></a></div><div><a href="/posts/fd159c93/" title="06Local Minima and Saddle Point"><img class="cover" src="https://picsum.photos/id/723/5184/3456" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-09-10</div><div class="title">06Local Minima and Saddle Point</div></div></a></div><div><a href="/posts/52da8f54/" title="05基本指导"><img class="cover" src="https://picsum.photos/id/723/5184/3456" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-09-10</div><div class="title">05基本指导</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/./img/touxiang.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">mqb</div><div class="author-info__description">mqb的个人博客</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/mqbin" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:xxxxxx@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">Welcome to Mqb's blog!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Batch-and-Momentum"><span class="toc-number">1.</span> <span class="toc-text">Batch and Momentum</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Small-Batch-v-s-Large-Batch"><span class="toc-number">1.1.</span> <span class="toc-text">Small Batch v.s. Large Batch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Noisy-update-is-better-for-training"><span class="toc-number">1.2.</span> <span class="toc-text">Noisy update is better for training</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Noisy-Update-is-better-for-generalization"><span class="toc-number">1.3.</span> <span class="toc-text">Noisy Update is better for generalization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Why%EF%BC%9F"><span class="toc-number">1.4.</span> <span class="toc-text">Why？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Momentum"><span class="toc-number">1.5.</span> <span class="toc-text">Momentum</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vanilla-%E4%B8%80%E8%88%AC%E7%9A%84-%E9%A6%99%E8%8D%89%E7%9A%84-Gradient-Descent"><span class="toc-number">1.6.</span> <span class="toc-text">Vanilla(一般的&#x2F;香草的) Gradient Descent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gradient-Descent-Momentum"><span class="toc-number">1.7.</span> <span class="toc-text">Gradient Descent + Momentum</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90"><span class="toc-number">1.8.</span> <span class="toc-text">例子</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/64a2f7c7/" title="02regression">02regression</a><time datetime="2021-09-09T16:00:00.000Z" title="发表于 2021-09-10 00:00:00">2021-09-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/8ed3abb8/" title="03(补充)deep learning">03(补充)deep learning</a><time datetime="2021-09-09T16:00:00.000Z" title="发表于 2021-09-10 00:00:00">2021-09-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/1969c2f9/" title="04(补充)反向传播">04(补充)反向传播</a><time datetime="2021-09-09T16:00:00.000Z" title="发表于 2021-09-10 00:00:00">2021-09-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/fd159c93/" title="06Local Minima and Saddle Point">06Local Minima and Saddle Point</a><time datetime="2021-09-09T16:00:00.000Z" title="发表于 2021-09-10 00:00:00">2021-09-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/bddf4f25/" title="07Batch and Momentum">07Batch and Momentum</a><time datetime="2021-09-09T16:00:00.000Z" title="发表于 2021-09-10 00:00:00">2021-09-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By mqb</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config-diff',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.removeEventListener('scroll', window.tocScrollFn)
+  window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
